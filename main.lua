@@ -1,3 +1,3 @@
 function love.draw()
-    love.graphics.print("Hello World", 400, 300)
+	love.graphics.rectangle("fill", 20,50, 60,120)
 end
