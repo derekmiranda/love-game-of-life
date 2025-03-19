@@ -1,42 +1,51 @@
-dead_clr = { 0.2, 0.2, 0.2 } 
-alive_clr = { 0.75, 0.75, 0.75 } 
+local ui = require("ui")
+
+local deadClr = {0.2, 0.2, 0.2}
+local hoverClr = {0.4, 0.4, 0.4}
+local aliveClr = {0.75, 0.75, 0.75}
 
 -- # of cells, horizontally + vertically, in grid
-grid_cell_wt = 24
-grid_cell_ht = 24
+local gridCellWt = 24
+local gridCellHt = 24
 
 -- grid rendering properties
-cell_ln = 16
-cell_gap = 4
+local cellLn = 16
+local cellGap = 4
 
-grid = nil
+local grid = nil
 
-function initialize_grid()
-	grid = {}          -- create the matrix
-	for i=1,grid_cell_wt do
-		grid[i] = {}     -- create a new row
-		for j=1,grid_cell_ht do
-			grid[i][j] = 0
-		end
-	end
+function initializeGrid()
+    grid = {} -- create the matrix
+    for i = 1, gridCellWt do
+        grid[i] = {} -- create a new row
+        for j = 1, gridCellHt do
+            local cellX = i * cellLn + (i - 1) * cellGap
+            local cellY = j * cellLn + (j - 1) * cellGap
+            grid[i][j] = ui.createButton(cellX, cellY, cellLn, cellLn, deadClr, hoverClr)
+        end
+    end
 end
 
-function draw_grid()
-	for i,row in pairs(grid) do
-		for j,v in pairs(row) do
-			local color = (v == 0 and dead_clr) or alive_clr
-			love.graphics.setColor(color)
-			local cell_x = i * cell_ln + (i - 1) * cell_gap
-			local cell_y = j * cell_ln + (j - 1) * cell_gap
-			love.graphics.rectangle("fill", cell_x, cell_y, cell_ln, cell_ln)
-		end
-	end
+function forEachCell(cb)
+    for i, row in pairs(grid) do
+        for j, cell in pairs(row) do
+            cb(cell)
+        end
+    end
 end
-	
+
 function love.load()
-	initialize_grid()
+    initializeGrid()
+end
+
+function love.mousemoved(x, y, dx, dy, isTouch)
+    forEachCell(function(cell)
+        cell.mousemoved(x, y)
+    end)
 end
 
 function love.draw()
-	draw_grid()
+    forEachCell(function(cell)
+        cell.draw()
+    end)
 end
