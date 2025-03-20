@@ -1,4 +1,5 @@
 local ui = require("ui")
+local game = require("game")
 
 local deadClr = {0.2, 0.2, 0.2}
 local deadHoverClr = {0.4, 0.4, 0.4}
@@ -40,13 +41,18 @@ function initializeGrid()
     end
 end
 
+function calcNextGen()
+    game.stepConway(grid)
+end
+
 function initializeBtns()
     btns.advance = ui.createButton({
         text = "ADVANCE",
         x = gridX,
         y = 10 * love.graphics.getHeight() / 12 + 2 * cellGap,
-        w = 80,
+        w = 4 * cellLn + 3 * cellGap,
         h = cellLn,
+        onpressed = calcNextGen,
         color = aliveClr,
         hoverColor = aliveHoverClr,
         pressedColor = deadHoverClr

@@ -16,7 +16,7 @@ function module.createButton(args)
     local hoverColor = args.hoverColor
     local pressedColor = args.pressedColor
     local pressedColor = args.pressedColor
-    local onpress = args.onpress or noop
+    local onpressed = args.onpressed or noop
 
     local btn = {}
     btn.hovered = false
@@ -39,7 +39,7 @@ function module.createButton(args)
             return
         end
 
-        onpress()
+        onpressed()
     end
 
     return btn
