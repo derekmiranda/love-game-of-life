@@ -27,7 +27,7 @@ function module.createCell(cellArgs)
         cell.hovered = mx >= x and mx <= x + w and my >= y and my <= y + h
     end
 
-    function cell.mousepressed(mx, my)
+    function cell.toggle()
         if not cell.hovered then
             return
         end

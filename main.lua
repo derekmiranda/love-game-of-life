@@ -1,8 +1,9 @@
 local ui = require("ui")
 
 local deadClr = {0.2, 0.2, 0.2}
-local hoverClr = {0.4, 0.4, 0.4}
+local deadHoverClr = {0.4, 0.4, 0.4}
 local aliveClr = {0.75, 0.75, 0.75}
+local aliveHoverClr = {0.6, 0.6, 0.6}
 
 -- # of cells, horizontally + vertically, in grid
 local gridCellWt = 24
@@ -27,9 +28,9 @@ function initializeGrid()
                 w = cellLn,
                 h = cellLn,
                 aliveColor = aliveClr,
-                aliveHoverColor = hoverClr,
+                aliveHoverColor = aliveHoverClr,
                 deadColor = deadClr,
-                deadHoverColor = hoverClr
+                deadHoverColor = deadHoverClr
             })
         end
     end
@@ -50,6 +51,14 @@ end
 function love.mousemoved(x, y, dx, dy, isTouch)
     forEachCell(function(cell)
         cell.mousemoved(x, y)
+    end)
+end
+
+function love.mousepressed(x, y, btn)
+    forEachCell(function(cell)
+        if btn == 1 then
+            cell.toggle()
+        end
     end)
 end
 
