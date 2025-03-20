@@ -21,7 +21,16 @@ function initializeGrid()
         for j = 1, gridCellHt do
             local cellX = i * cellLn + (i - 1) * cellGap
             local cellY = j * cellLn + (j - 1) * cellGap
-            grid[i][j] = ui.createButton(cellX, cellY, cellLn, cellLn, deadClr, hoverClr)
+            grid[i][j] = ui.createCell({
+                x = cellX,
+                y = cellY,
+                w = cellLn,
+                h = cellLn,
+                aliveColor = aliveClr,
+                aliveHoverColor = hoverClr,
+                deadColor = deadClr,
+                deadHoverColor = hoverClr
+            })
         end
     end
 end
