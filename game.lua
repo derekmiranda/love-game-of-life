@@ -27,10 +27,17 @@ function getNumAliveNeighbors(grid, i, j)
 end
 
 function module.stepConway(grid)
+    local newGridVals = {}
     for i, row in pairs(grid) do
+        newGridVals[i] = {}
         for j, cell in pairs(row) do
             local numAlive = getNumAliveNeighbors(grid, i, j)
-            cell.alive = numAlive == 3 or cell.alive and numAlive == 2
+            newGridVals[i][j] = numAlive == 3 or cell.alive and numAlive == 2
+        end
+    end
+    for i, row in pairs(grid) do
+        for j, cell in pairs(row) do
+            cell.alive = newGridVals[i][j]
         end
     end
 end

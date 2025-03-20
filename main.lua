@@ -7,14 +7,16 @@ local aliveClr = {0.75, 0.75, 0.75}
 local aliveHoverClr = {0.6, 0.6, 0.6}
 
 -- # of cells, horizontally + vertically, in grid
-local gridCellWt = 16
-local gridCellHt = 16
+local gridCellWt = 8
+local gridCellHt = 8
 
 -- grid rendering properties
-local cellLn = 16
-local cellGap = 4
-local gridX = love.graphics.getWidth() / 12
-local gridY = 10 * love.graphics.getHeight() / 12 - gridCellHt * cellLn - (gridCellHt - 1) * cellGap
+local cellLn = 32
+local cellGap = 8
+local gridHt = gridCellHt * cellLn + (gridCellHt - 1) * cellGap
+local gridLeft = love.graphics.getWidth() / 12
+local gridBtm = 10 * love.graphics.getHeight() / 12
+local gridTop = gridBtm - gridHt
 
 -- refs
 local grid = nil
@@ -25,8 +27,8 @@ function initializeGrid()
     for i = 1, gridCellWt do
         grid[i] = {} -- create a new row
         for j = 1, gridCellHt do
-            local cellX = gridX + (i - 1) * cellLn + (i - 1) * cellGap
-            local cellY = gridY + (j - 1) * cellLn + (j - 1) * cellGap
+            local cellX = gridLeft + (i - 1) * cellLn + (i - 1) * cellGap
+            local cellY = gridTop + (j - 1) * cellLn + (j - 1) * cellGap
             grid[i][j] = ui.createCell({
                 x = cellX,
                 y = cellY,
@@ -45,14 +47,31 @@ function calcNextGen()
     game.stepConway(grid)
 end
 
+function clearGrid()
+    forEachCell(function(cell)
+        cell.alive = false
+    end)
+end
+
 function initializeBtns()
     btns.advance = ui.createButton({
         text = "ADVANCE",
-        x = gridX,
-        y = 10 * love.graphics.getHeight() / 12 + 2 * cellGap,
-        w = 4 * cellLn + 3 * cellGap,
-        h = cellLn,
+        x = gridLeft,
+        y = gridBtm + cellGap,
+        w = 2 * cellLn + cellGap,
+        h = 16,
         onpressed = calcNextGen,
+        color = aliveClr,
+        hoverColor = aliveHoverClr,
+        pressedColor = deadHoverClr
+    })
+    btns.clear = ui.createButton({
+        text = "CLEAR",
+        x = gridLeft + 2 * cellLn + 2 * cellGap,
+        y = gridBtm + cellGap,
+        w = 2 * cellLn + cellGap,
+        h = 16,
+        onpressed = clearGrid,
         color = aliveClr,
         hoverColor = aliveHoverClr,
         pressedColor = deadHoverClr
